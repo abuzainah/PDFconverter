@@ -1,0 +1,1400 @@
+================================================================================
+                    PDF CONVERTER WEB APPLICATION
+                    COMPLETE INSTRUCTIONS FOR CURSOR
+================================================================================
+
+Read this entire document before starting. Follow every instruction precisely.
+
+================================================================================
+PART 1: PROJECT OVERVIEW
+================================================================================
+
+Project Name: PDF Quick Convert
+
+Purpose: A free online tool that converts PDF files to PNG, JPG, TXT, and DOCX 
+formats. All processing happens in the browser for privacy.
+
+Technology Stack:
+- Next.js 14 with App Router
+- TypeScript
+- Tailwind CSS
+- Client-side PDF processing
+
+Deployment Target: Cloudflare Pages (static export)
+
+Monetization: Google AdSense advertisements
+
+Key Requirements:
+- Must be fully static (no server-side processing)
+- Must work entirely in the browser
+- Must comply with Google AdSense policies
+- Must be mobile responsive
+- Must have all required legal pages
+
+
+================================================================================
+PART 2: DEPENDENCIES TO INSTALL
+================================================================================
+
+After creating the Next.js project, install these packages:
+
+Production dependencies:
+- react-dropzone (for file upload drag and drop)
+- pdf-lib (for PDF manipulation)
+- pdfjs-dist (for PDF rendering and text extraction)
+- docx (for creating Word documents)
+- jszip (for bundling multiple files into ZIP)
+- file-saver (for triggering file downloads)
+
+Development dependencies:
+- @types/file-saver (TypeScript types)
+
+
+================================================================================
+PART 3: PROJECT CONFIGURATION
+================================================================================
+
+Next.js Configuration (next.config.js):
+- Set output to "export" for static generation
+- Set images to unoptimized (required for static export)
+- Enable trailing slashes for better compatibility
+
+Tailwind Configuration:
+- Include all standard paths for content scanning
+- Add a primary color palette using blue shades
+- Primary color should be based on #2563eb
+
+TypeScript Configuration:
+- Use strict mode
+- Configure paths for clean imports
+
+
+================================================================================
+PART 4: FILE STRUCTURE
+================================================================================
+
+Create this exact folder and file structure:
+
+ROOT LEVEL:
+- next.config.js
+- tailwind.config.js
+- tsconfig.json
+- package.json
+
+APP FOLDER (app/):
+- layout.tsx (root layout with metadata)
+- page.tsx (homepage with converter)
+- globals.css (global styles)
+- privacy/page.tsx (privacy policy - REQUIRED for AdSense)
+- terms/page.tsx (terms of service - REQUIRED for AdSense)
+- about/page.tsx (about page - REQUIRED for AdSense)
+- contact/page.tsx (contact page - REQUIRED for AdSense)
+- faq/page.tsx (frequently asked questions)
+- how-it-works/page.tsx (explanation page)
+- pdf-to-png/page.tsx (dedicated PNG conversion page)
+- pdf-to-jpg/page.tsx (dedicated JPG conversion page)
+- pdf-to-text/page.tsx (dedicated text conversion page)
+- pdf-to-word/page.tsx (dedicated Word conversion page)
+
+COMPONENTS FOLDER (components/):
+
+Layout subfolder (components/layout/):
+- Header.tsx (site header with navigation)
+- Footer.tsx (site footer with links)
+- Navigation.tsx (navigation menu component)
+
+Converter subfolder (components/converter/):
+- ConverterTool.tsx (main converter component)
+- UploadZone.tsx (drag and drop upload area)
+- FormatSelector.tsx (format selection buttons)
+- ConversionProgress.tsx (progress bar during conversion)
+- DownloadArea.tsx (download buttons after conversion)
+
+Ads subfolder (components/ads/):
+- AdBanner.tsx (advertisement placeholder component)
+- AdSenseScript.tsx (AdSense script loader)
+
+UI subfolder (components/ui/):
+- Button.tsx (reusable button component)
+- Card.tsx (reusable card component)
+- Container.tsx (page container component)
+
+LIB FOLDER (lib/):
+
+Conversion subfolder (lib/conversion/):
+- pdfToImages.ts (converts PDF pages to PNG or JPG)
+- pdfToText.ts (extracts text from PDF)
+- pdfToWord.ts (converts PDF to DOCX)
+
+Utils subfolder (lib/utils/):
+- fileHelpers.ts (file size formatting, validation)
+- downloadHelpers.ts (download and ZIP functions)
+
+PUBLIC FOLDER (public/):
+- robots.txt (search engine instructions)
+- sitemap.xml (list of all pages for SEO)
+- images/logo.svg (site logo)
+- images/og-image.png (social sharing image)
+
+
+================================================================================
+PART 5: ROOT LAYOUT SPECIFICATIONS
+================================================================================
+
+File: app/layout.tsx
+
+This is the main layout that wraps all pages.
+
+METADATA (for SEO and social sharing):
+- Title: "Free PDF Converter - Convert PDF to PNG, JPG, Word, Text Online"
+- Description: "Convert your PDF files to images, text, or Word documents 
+  instantly. Free, secure, and no signup required. All processing happens 
+  in your browser."
+- Keywords: pdf converter, pdf to png, pdf to jpg, pdf to word, pdf to text, 
+  free pdf converter, online pdf tool
+- Open Graph title, description, and image
+- Twitter card metadata
+- Robots: index, follow
+- Author: PDF Quick Convert
+
+STRUCTURE:
+- HTML element with lang="en"
+- Head section with metadata
+- Body containing:
+  - Header component at the top
+  - Main element with children (page content)
+  - Footer component at the bottom
+
+STYLING:
+- Minimum height of 100vh on body
+- Flex column layout to push footer to bottom
+- Light gray or white background
+- Dark text color for readability
+
+ADSENSE PREPARATION:
+- Add a comment placeholder in the head where AdSense script will go
+- Do not add actual AdSense code until approved
+
+
+================================================================================
+PART 6: HOMEPAGE SPECIFICATIONS
+================================================================================
+
+File: app/page.tsx
+
+This is the main landing page with the converter tool.
+
+PAGE METADATA:
+- Title: "Free PDF Converter - Convert PDF to PNG, JPG, Word, Text Online"
+- Description: Same as root layout
+
+SECTION 1 - HERO:
+- Large headline: "Convert PDF Files Instantly - 100% Free"
+- Subheadline explaining the service and privacy benefits
+- Mention that files never leave the browser
+- Ad banner placeholder at top (728x90 leaderboard size)
+
+SECTION 2 - CONVERTER TOOL:
+- The main ConverterTool component centered on page
+- This is the primary interactive element
+- Should be visually prominent
+
+SECTION 3 - MIDDLE AD:
+- Ad banner placeholder (300x250 rectangle size)
+- Centered with margin above and below
+
+SECTION 4 - FEATURES GRID:
+- Four cards in a responsive grid (2x2 on desktop, stacked on mobile)
+
+Feature 1: Security
+- Title: "100% Secure"
+- Description: Files are processed in your browser, never uploaded anywhere
+
+Feature 2: Speed
+- Title: "Lightning Fast"
+- Description: Convert PDFs in seconds using modern technology
+
+Feature 3: No Account
+- Title: "No Signup Required"
+- Description: Start immediately without registration
+
+Feature 4: Formats
+- Title: "Multiple Formats"
+- Description: Export to PNG, JPG, Text, or Word
+
+SECTION 5 - HOW IT WORKS:
+- Three steps with numbers or icons
+
+Step 1: Upload
+- Title: "Upload Your PDF"
+- Description: Drag and drop or click to select (up to 20MB)
+
+Step 2: Choose
+- Title: "Choose Your Format"
+- Description: Select PNG, JPG, TXT, or DOCX
+
+Step 3: Download
+- Title: "Download Instantly"
+- Description: Your converted file is ready immediately
+
+SECTION 6 - CONVERSION LINKS:
+- Four cards linking to dedicated conversion pages
+- PDF to PNG with link to /pdf-to-png
+- PDF to JPG with link to /pdf-to-jpg
+- PDF to Text with link to /pdf-to-text
+- PDF to Word with link to /pdf-to-word
+- Each card has an icon, title, and brief description
+
+SECTION 7 - FAQ PREVIEW:
+- Show 4 frequently asked questions with answers
+- Use accordion style (click to expand)
+- Link to full FAQ page at bottom
+
+Question 1: "Is this PDF converter really free?"
+Answer: Yes, completely free. We support the service through advertisements.
+
+Question 2: "Are my files secure?"
+Answer: Yes, all processing happens in your browser. Files never leave your device.
+
+Question 3: "What's the maximum file size?"
+Answer: You can convert PDFs up to 20MB.
+
+Question 4: "Do I need to create an account?"
+Answer: No, you can start converting immediately.
+
+SECTION 8 - BOTTOM AD:
+- Ad banner placeholder (728x90 leaderboard size)
+
+SECTION 9 - SEO CONTENT:
+- 2-3 paragraphs of informative content about PDF conversion
+- This is CRITICAL for AdSense approval
+- Explain what PDF format is and why conversion is useful
+- Discuss common use cases
+- Explain privacy benefits of browser-based conversion
+
+
+================================================================================
+PART 7: HEADER COMPONENT SPECIFICATIONS
+================================================================================
+
+File: components/layout/Header.tsx
+
+STRUCTURE:
+- Fixed or sticky header at top of page
+- White background with subtle shadow
+- Full width with max-width container centered
+
+LEFT SIDE:
+- Logo or site name "PDF Quick Convert"
+- Links to homepage when clicked
+
+CENTER OR RIGHT - NAVIGATION:
+- Home link
+- PDF to PNG link
+- PDF to JPG link
+- PDF to Text link
+- PDF to Word link
+- FAQ link
+
+MOBILE BEHAVIOR:
+- Hamburger menu icon on small screens
+- Navigation links in dropdown or slide-out menu
+- Smooth animation for menu open/close
+
+STYLING:
+- Clean and minimal design
+- Adequate padding
+- Clear hover states on links
+- Current page indicator
+
+
+================================================================================
+PART 8: FOOTER COMPONENT SPECIFICATIONS
+================================================================================
+
+File: components/layout/Footer.tsx
+
+STRUCTURE:
+- Dark gray or slate background
+- Light text for contrast
+- Multiple columns on desktop, stacked on mobile
+
+COLUMN 1 - ABOUT:
+- Site name or logo
+- Brief tagline: "Free, secure PDF conversion in your browser"
+
+COLUMN 2 - CONVERSIONS:
+- Heading: "Convert"
+- Link: PDF to PNG
+- Link: PDF to JPG
+- Link: PDF to Text
+- Link: PDF to Word
+
+COLUMN 3 - RESOURCES:
+- Heading: "Resources"
+- Link: How It Works
+- Link: FAQ
+- Link: About Us
+- Link: Contact
+
+COLUMN 4 - LEGAL:
+- Heading: "Legal"
+- Link: Privacy Policy
+- Link: Terms of Service
+
+BOTTOM BAR:
+- Copyright notice with current year
+- Text: "© 2024 PDF Quick Convert. All rights reserved."
+
+STYLING:
+- Generous padding
+- Clear separation between columns
+- Links should have hover states
+
+
+================================================================================
+PART 9: CONVERTER TOOL COMPONENT SPECIFICATIONS
+================================================================================
+
+File: components/converter/ConverterTool.tsx
+
+This is the main interactive component for converting PDFs.
+
+PROPS:
+- defaultFormat (optional): Pre-select a format for dedicated pages
+
+STATE TO MANAGE:
+- selectedFile: The PDF file chosen by user (or null)
+- selectedFormat: Which format to convert to (png, jpg, txt, docx)
+- isConverting: Whether conversion is in progress
+- progress: Percentage complete (0 to 100)
+- currentPage: Which page is being processed
+- totalPages: Total pages in the PDF
+- convertedFiles: Array of converted files ready for download
+- error: Error message if something fails
+
+DISPLAY STATES:
+
+State 1 - No File Selected:
+- Show the UploadZone component
+- Show the FormatSelector component
+- Convert button is disabled
+
+State 2 - File Selected:
+- Show file name and size
+- Show remove/clear button
+- Show FormatSelector (unless defaultFormat is set)
+- Convert button is enabled
+
+State 3 - Converting:
+- Show ConversionProgress component
+- Show current page being processed
+- Show progress bar
+- Convert button shows loading state
+- Optional cancel button
+
+State 4 - Conversion Complete:
+- Show DownloadArea component
+- List all converted files
+- Individual download buttons for each file
+- "Download All as ZIP" button if multiple files
+- "Convert Another" button to reset
+
+State 5 - Error:
+- Show error message
+- Provide helpful explanation
+- "Try Again" button to reset
+
+VALIDATION:
+- Only accept PDF files
+- Maximum file size: 20MB
+- Show clear error messages for invalid files
+
+
+================================================================================
+PART 10: UPLOAD ZONE COMPONENT SPECIFICATIONS
+================================================================================
+
+File: components/converter/UploadZone.tsx
+
+PURPOSE:
+- Allows users to select a PDF file via drag-and-drop or click
+
+PROPS:
+- onFileSelect: Function to call when a file is selected
+- maxSize: Maximum file size in bytes (default 20MB)
+- disabled: Whether the upload is disabled
+
+VISUAL DESIGN:
+- Large rectangular area with dashed border
+- Minimum height of 200 pixels
+- Centered content with upload icon
+- Main text: "Drag & drop your PDF here"
+- Secondary text: "or click to browse (max 20MB)"
+
+STATES:
+- Default: Gray dashed border, light gray background
+- Drag Active: Blue dashed border, light blue background
+- Disabled: Muted colors, not clickable
+
+FUNCTIONALITY:
+- Use react-dropzone library
+- Accept only PDF files
+- Validate file size on drop
+- Call onFileSelect with the file when valid
+- Show error for invalid files
+
+ACCESSIBILITY:
+- Keyboard accessible
+- Clear focus states
+- Screen reader friendly
+
+
+================================================================================
+PART 11: FORMAT SELECTOR COMPONENT SPECIFICATIONS
+================================================================================
+
+File: components/converter/FormatSelector.tsx
+
+PURPOSE:
+- Allows users to choose the output format
+
+PROPS:
+- selectedFormat: Currently selected format
+- onFormatChange: Function to call when format changes
+- disabled: Whether selection is disabled
+
+LAYOUT:
+- Four buttons or cards in a row (responsive grid)
+- Each represents one format option
+
+FORMAT OPTIONS:
+
+PNG Option:
+- Icon representing image with transparency
+- Title: "PNG"
+- Subtitle: "Best for images with transparency"
+
+JPG Option:
+- Icon representing compressed image
+- Title: "JPG"
+- Subtitle: "Smaller file size, good for photos"
+
+TXT Option:
+- Icon representing text document
+- Title: "TXT"
+- Subtitle: "Extract all text content"
+
+DOCX Option:
+- Icon representing Word document
+- Title: "DOCX"
+- Subtitle: "Editable Word document"
+
+STYLING:
+- Selected format has highlighted border and background
+- Hover state on unselected options
+- Clear visual distinction between selected and unselected
+- Responsive: 4 columns on desktop, 2 columns on tablet, 1 on mobile
+
+
+================================================================================
+PART 12: CONVERSION PROGRESS COMPONENT SPECIFICATIONS
+================================================================================
+
+File: components/converter/ConversionProgress.tsx
+
+PURPOSE:
+- Shows progress during PDF conversion
+
+PROPS:
+- progress: Number from 0 to 100
+- currentPage: Current page being processed
+- totalPages: Total pages in PDF
+- onCancel (optional): Function to cancel conversion
+
+VISUAL ELEMENTS:
+- Progress bar showing percentage
+- Progress bar should animate smoothly
+- Text showing: "Converting page X of Y..."
+- Percentage display
+- Optional cancel button
+
+STYLING:
+- Progress bar with primary color fill
+- Rounded corners on progress bar
+- Clear, readable text
+- Adequate spacing
+
+
+================================================================================
+PART 13: DOWNLOAD AREA COMPONENT SPECIFICATIONS
+================================================================================
+
+File: components/converter/DownloadArea.tsx
+
+PURPOSE:
+- Displays converted files and download options
+
+PROPS:
+- files: Array of converted files (each with name, blob, type)
+- onReset: Function to start over with a new file
+
+VISUAL ELEMENTS:
+- Success message: "Conversion Complete!"
+- List of converted files showing:
+  - File icon based on type
+  - File name
+  - File size
+  - Download button for each file
+- If multiple files: "Download All as ZIP" button
+- "Convert Another File" button at the bottom
+
+FUNCTIONALITY:
+- Individual download triggers browser download
+- ZIP download bundles all files
+- Reset button clears everything and shows upload zone
+
+STYLING:
+- Success message in green
+- Clear file list with good spacing
+- Prominent download buttons
+- Secondary styling for reset button
+
+
+================================================================================
+PART 14: AD BANNER COMPONENT SPECIFICATIONS
+================================================================================
+
+File: components/ads/AdBanner.tsx
+
+PURPOSE:
+- Placeholder for Google AdSense advertisements
+- Will be replaced with real ad code after AdSense approval
+
+PROPS:
+- slot: Position identifier (top, middle, bottom, sidebar)
+- size: Ad size (leaderboard, rectangle, skyscraper)
+
+SIZE SPECIFICATIONS:
+- Leaderboard: 728x90 pixels on desktop, 320x100 on mobile
+- Rectangle: 300x250 pixels
+- Skyscraper: 160x600 pixels
+
+CURRENT IMPLEMENTATION (before AdSense approval):
+- Render a div with the specified dimensions
+- Light gray background
+- Centered text saying "Advertisement"
+- Subtle border
+
+FUTURE IMPLEMENTATION (after AdSense approval):
+- Replace placeholder with actual AdSense ad unit code
+- Each slot should have its own ad unit ID from AdSense
+
+IMPORTANT NOTES FOR ADSENSE COMPLIANCE:
+- Ads must be clearly distinguishable from content
+- Do not place more than 3 ad units per page initially
+- Ads must not interfere with user experience
+- No placing ads where they might get accidental clicks
+
+
+================================================================================
+PART 15: PRIVACY POLICY PAGE SPECIFICATIONS
+================================================================================
+
+File: app/privacy/page.tsx
+
+THIS PAGE IS REQUIRED FOR GOOGLE ADSENSE APPROVAL.
+
+PAGE METADATA:
+- Title: "Privacy Policy - PDF Quick Convert"
+- Description: "Our privacy policy explains how we handle your data."
+
+REQUIRED SECTIONS:
+
+Section 1 - Introduction:
+- State the website name
+- Explain this policy describes data practices
+- Include last updated date
+
+Section 2 - Information We Collect:
+- Explain that PDF conversion happens entirely in the browser
+- No files are uploaded to any server
+- No personal file data is collected or stored
+- We do not have access to user files
+
+Section 3 - Cookies and Tracking:
+- Explain the site uses cookies for:
+  - Essential site functionality
+  - Analytics (if applicable)
+  - Advertising purposes
+- List types of cookies used
+
+Section 4 - Google AdSense and Advertising (CRITICAL):
+- State that third-party vendors including Google use cookies to serve ads
+- Explain Google uses advertising cookies to serve ads based on visits
+- Provide link to Google's ad policies: https://policies.google.com/technologies/ads
+- Explain users can opt out at Google Ad Settings: https://www.google.com/settings/ads
+- State the site adheres to Google AdSense Program Policies
+
+Section 5 - Data Security:
+- Explain security measures taken
+- Emphasize local browser processing
+
+Section 6 - Third-Party Links:
+- Disclaimer about external links not being under our control
+
+Section 7 - Children's Privacy:
+- State the site is not directed at children under 13
+- COPPA compliance statement
+
+Section 8 - Changes to Policy:
+- Explain how users will be notified of changes
+- State that continued use means acceptance
+
+Section 9 - Contact Information:
+- Provide method to contact with privacy concerns
+
+STYLING:
+- Clear headings for each section
+- Readable paragraph text
+- Professional appearance
+
+
+================================================================================
+PART 16: TERMS OF SERVICE PAGE SPECIFICATIONS
+================================================================================
+
+File: app/terms/page.tsx
+
+THIS PAGE IS REQUIRED FOR GOOGLE ADSENSE APPROVAL.
+
+PAGE METADATA:
+- Title: "Terms of Service - PDF Quick Convert"
+- Description: "Terms and conditions for using our free PDF converter."
+
+REQUIRED SECTIONS:
+
+Section 1 - Acceptance of Terms:
+- By using the site, users agree to these terms
+- If you do not agree, do not use the service
+
+Section 2 - Description of Service:
+- Free PDF conversion tool
+- Browser-based processing
+- Supported formats: PNG, JPG, TXT, DOCX
+
+Section 3 - User Responsibilities:
+- Users must have rights to files they convert
+- No illegal content
+- No malicious use of the service
+- Users are responsible for their files
+
+Section 4 - Intellectual Property:
+- Users retain all rights to their files
+- Site branding and content belongs to PDF Quick Convert
+- Users may not copy or reproduce site content
+
+Section 5 - Disclaimer of Warranties:
+- Service provided "as is" without warranties
+- No guarantee of accuracy, reliability, or availability
+- Use at your own risk
+
+Section 6 - Limitation of Liability:
+- Not liable for damages from use of service
+- Not liable for data loss
+- Emphasize local processing means we never have your files
+
+Section 7 - Advertising:
+- Site displays third-party advertisements
+- Not responsible for advertisement content
+- Ads are served by Google AdSense
+
+Section 8 - Modifications:
+- Right to modify or discontinue service at any time
+- Right to update these terms
+- Continued use means acceptance of changes
+
+Section 9 - Governing Law:
+- Specify jurisdiction for legal matters
+
+Section 10 - Contact:
+- How to reach with questions about terms
+
+
+================================================================================
+PART 17: ABOUT PAGE SPECIFICATIONS
+================================================================================
+
+File: app/about/page.tsx
+
+THIS PAGE HELPS WITH GOOGLE ADSENSE APPROVAL.
+
+PAGE METADATA:
+- Title: "About Us - PDF Quick Convert"
+- Description: "Learn about PDF Quick Convert and our mission."
+
+SECTIONS:
+
+Section 1 - Our Mission:
+- Why this tool was created
+- Commitment to free, accessible tools
+- Focus on user privacy
+
+Section 2 - What Makes Us Different:
+- Privacy-first approach with browser processing
+- No signup required
+- No file uploads to external servers
+- Fast and reliable conversion
+
+Section 3 - Our Technology:
+- Brief explanation of browser-based conversion
+- Benefits of local processing
+- Modern web technologies used
+
+Section 4 - Our Commitment:
+- Continuous improvement
+- User feedback welcome
+- Dedication to keeping service free
+
+Include an ad banner between sections.
+
+
+================================================================================
+PART 18: CONTACT PAGE SPECIFICATIONS
+================================================================================
+
+File: app/contact/page.tsx
+
+THIS PAGE IS REQUIRED FOR GOOGLE ADSENSE APPROVAL.
+
+PAGE METADATA:
+- Title: "Contact Us - PDF Quick Convert"
+- Description: "Get in touch with the PDF Quick Convert team."
+
+CONTENT:
+
+Contact Form with fields:
+- Name (text input)
+- Email (email input)
+- Subject (dropdown with options):
+  - General Inquiry
+  - Technical Support
+  - Feedback
+  - Bug Report
+  - Other
+- Message (textarea)
+- Submit button
+
+Form Handling Note:
+Since this is a static site on Cloudflare Pages, use one of these options:
+- Formspree.io (free tier available)
+- Getform.io
+- Or display an email address instead of a form
+
+Alternative Contact:
+- Display an email address for direct contact
+- Expected response time (e.g., "within 48 hours")
+
+Additional Elements:
+- Link to FAQ for common questions
+- Brief message encouraging feedback
+
+
+================================================================================
+PART 19: FAQ PAGE SPECIFICATIONS
+================================================================================
+
+File: app/faq/page.tsx
+
+PAGE METADATA:
+- Title: "FAQ - Frequently Asked Questions About PDF Conversion"
+- Description: "Find answers to common questions about our PDF converter."
+
+STRUCTURE:
+- Use accordion style (expandable sections)
+- Group questions by category
+- Include at least 15 questions total
+
+CATEGORY 1 - GENERAL QUESTIONS:
+
+Q: What is PDF Quick Convert?
+A: A free online tool that converts PDF files to various formats entirely in 
+   your browser.
+
+Q: Is this service really free?
+A: Yes, completely free. We support the service through advertisements.
+
+Q: Do I need to create an account?
+A: No, you can start converting immediately without any registration.
+
+Q: What formats can I convert PDF to?
+A: PNG images, JPG images, plain text (TXT), and Word documents (DOCX).
+
+Q: Is there a file size limit?
+A: Yes, maximum file size is 20MB.
+
+CATEGORY 2 - SECURITY AND PRIVACY:
+
+Q: Is my PDF file secure?
+A: Yes, all processing happens locally in your browser. Your files are never 
+   uploaded to any server.
+
+Q: Do you store my files?
+A: No, we never see or store your files. Everything happens on your device.
+
+Q: How does browser-based conversion work?
+A: Modern browsers can process files locally using JavaScript. Your PDF is read 
+   and converted entirely on your computer.
+
+Q: Can you see the content of my PDFs?
+A: No, we have no access to your files. They never leave your browser.
+
+CATEGORY 3 - TECHNICAL QUESTIONS:
+
+Q: Why did my conversion fail?
+A: Common reasons include corrupted PDF files, password protection, or files 
+   that exceed the size limit.
+
+Q: What browsers are supported?
+A: All modern browsers including Chrome, Firefox, Safari, and Edge.
+
+Q: Can I convert password-protected PDFs?
+A: No, password-protected PDFs cannot be converted. Please remove the password 
+   first.
+
+Q: What's the maximum number of pages?
+A: There is no strict page limit, but very large documents may be slower.
+
+Q: Why is the text extraction not perfect?
+A: Text extraction depends on how the PDF was created. Scanned documents may 
+   not have extractable text.
+
+CATEGORY 4 - OUTPUT QUALITY:
+
+Q: What resolution are the PNG/JPG images?
+A: Images are rendered at 2x scale for high quality output.
+
+Q: Will the Word document look exactly like my PDF?
+A: The text content will be preserved, but complex formatting may differ.
+
+Q: Can I convert scanned PDFs to text?
+A: Scanned PDFs contain images, not text. Our tool extracts existing text only, 
+   not OCR.
+
+Include ad banners between question categories.
+
+
+================================================================================
+PART 20: HOW IT WORKS PAGE SPECIFICATIONS
+================================================================================
+
+File: app/how-it-works/page.tsx
+
+PAGE METADATA:
+- Title: "How It Works - PDF Conversion Process Explained"
+- Description: "Learn how our browser-based PDF converter works."
+
+SECTIONS:
+
+Section 1 - Overview:
+- Brief explanation of the conversion process
+- Emphasize simplicity and privacy
+
+Section 2 - Step by Step Guide:
+
+Step 1: Select Your PDF
+- Description of how to upload
+- Drag and drop or click to browse
+- File size limit reminder
+
+Step 2: Choose Output Format
+- Explanation of each format option
+- When to use each format
+
+Step 3: Click Convert
+- What happens during conversion
+- Processing happens locally
+
+Step 4: Download Your Files
+- Individual downloads available
+- ZIP option for multiple files
+
+Section 3 - Technical Explanation:
+- How browser-based conversion works (simplified)
+- Why it's more secure than server uploads
+- No data transmitted over the internet
+
+Section 4 - Format Specific Information:
+
+PDF to PNG:
+- Best for: Presentations, documents with graphics
+- Preserves transparency
+- High quality output
+
+PDF to JPG:
+- Best for: Photos, sharing online
+- Smaller file sizes
+- Good compression
+
+PDF to Text:
+- Best for: Copying text, accessibility
+- Extracts all readable text
+- Preserves page structure
+
+PDF to Word:
+- Best for: Editing documents
+- Text is fully editable
+- Basic formatting preserved
+
+Include ad banners throughout the page.
+
+
+================================================================================
+PART 21: INDIVIDUAL CONVERSION PAGE SPECIFICATIONS
+================================================================================
+
+Create four pages with similar structure:
+- app/pdf-to-png/page.tsx
+- app/pdf-to-jpg/page.tsx
+- app/pdf-to-text/page.tsx
+- app/pdf-to-word/page.tsx
+
+TEMPLATE FOR EACH PAGE:
+
+PAGE METADATA (example for PNG):
+- Title: "PDF to PNG Converter - Convert PDF Pages to PNG Images Free"
+- Description: "Convert PDF files to high-quality PNG images online. Free, 
+  secure, and instant."
+
+SECTIONS:
+
+Section 1 - Hero:
+- Headline: "Convert PDF to [FORMAT]"
+- Subheadline explaining this specific conversion
+- Top ad banner
+
+Section 2 - Converter Tool:
+- ConverterTool component with defaultFormat set to this format
+- Format selector can be hidden or pre-selected
+
+Section 3 - Middle Ad:
+- Rectangle ad banner
+
+Section 4 - Why Convert Section:
+- 2-3 paragraphs explaining use cases for this format
+- Benefits of this specific conversion
+- Common scenarios
+
+Section 5 - Features:
+- List of features specific to this conversion
+- Quality information
+- Speed benefits
+
+Section 6 - How To Section:
+- Step by step for this specific conversion
+- Tips for best results
+
+Section 7 - Format-Specific FAQ:
+- 5-6 questions specific to this format conversion
+- Accordion style
+
+Section 8 - Related Conversions:
+- Links to the other three conversion pages
+- Encourage exploring other formats
+
+Section 9 - Bottom Ad:
+- Leaderboard ad banner
+
+FORMAT-SPECIFIC CONTENT:
+
+For PDF to PNG:
+- Emphasize transparency support
+- Good for presentations and documents
+- High quality output
+
+For PDF to JPG:
+- Emphasize smaller file sizes
+- Good for photos and web use
+- Compression benefits
+
+For PDF to Text:
+- Emphasize text extraction
+- Good for copying content
+- Accessibility benefits
+
+For PDF to Word:
+- Emphasize editability
+- Good for modifying documents
+- Formatting considerations
+
+
+================================================================================
+PART 22: CONVERSION LIBRARY SPECIFICATIONS
+================================================================================
+
+FILE: lib/conversion/pdfToImages.ts
+
+PURPOSE:
+Convert PDF pages to PNG or JPG images
+
+FUNCTIONALITY:
+- Accept a PDF file, format choice (png/jpg), and progress callback
+- Load PDF using pdfjs-dist library
+- Configure PDF.js worker from CDN for Cloudflare compatibility
+- Loop through each page of the PDF
+- Render each page to a canvas element
+- Convert canvas to image blob (PNG or JPG)
+- For JPG, use quality setting of 0.92
+- Use scale of 2 for high quality output
+- Call progress callback after each page
+- Return array of converted files with name, blob, and type
+
+ERROR HANDLING:
+- Handle corrupted PDFs
+- Handle password-protected PDFs
+- Handle canvas rendering failures
+
+
+FILE: lib/conversion/pdfToText.ts
+
+PURPOSE:
+Extract text content from PDF
+
+FUNCTIONALITY:
+- Accept a PDF file and progress callback
+- Load PDF using pdfjs-dist library
+- Loop through each page
+- Extract text content from each page
+- Combine text with page separators
+- Call progress callback after each page
+- Return single text file with all content
+
+ERROR HANDLING:
+- Handle PDFs with no extractable text
+- Handle corrupted PDFs
+
+
+FILE: lib/conversion/pdfToWord.ts
+
+PURPOSE:
+Convert PDF to Word document
+
+FUNCTIONALITY:
+- Accept a PDF file and progress callback
+- Load PDF using pdfjs-dist library
+- Extract text from each page
+- Use docx library to create Word document
+- Add each page's text as paragraphs
+- Include page headers/separators
+- Call progress callback after each page
+- Return single DOCX file
+
+ERROR HANDLING:
+- Handle PDFs with no text
+- Handle document creation failures
+
+
+FILE: lib/utils/downloadHelpers.ts
+
+PURPOSE:
+Handle file downloads
+
+FUNCTIONALITY:
+- Single file download using file-saver
+- Multiple file ZIP download using jszip
+- Accept array of files (name and blob)
+- Create ZIP with all files
+- Trigger browser download
+
+
+FILE: lib/utils/fileHelpers.ts
+
+PURPOSE:
+File validation and formatting
+
+FUNCTIONALITY:
+- Validate file is PDF
+- Validate file size
+- Format file size for display (KB, MB)
+- Get file extension
+
+
+================================================================================
+PART 23: SEO FILES SPECIFICATIONS
+================================================================================
+
+FILE: public/robots.txt
+
+CONTENT:
+- Allow all user agents
+- Allow all paths
+- Include sitemap URL
+- Replace YOUR-DOMAIN.com with actual domain
+
+
+FILE: public/sitemap.xml
+
+CONTENT:
+- XML sitemap format
+- Include all pages:
+  - Homepage (priority 1.0)
+  - PDF to PNG (priority 0.9)
+  - PDF to JPG (priority 0.9)
+  - PDF to Text (priority 0.9)
+  - PDF to Word (priority 0.9)
+  - How It Works (priority 0.7)
+  - FAQ (priority 0.7)
+  - About (priority 0.5)
+  - Contact (priority 0.5)
+  - Privacy (priority 0.3)
+  - Terms (priority 0.3)
+- Set appropriate change frequencies
+- Replace YOUR-DOMAIN.com with actual domain
+
+
+================================================================================
+PART 24: STYLING GUIDELINES
+================================================================================
+
+COLOR SCHEME:
+- Primary: Blue (#2563eb and variants)
+- Background: White and light gray (#f8fafc)
+- Text: Dark gray (#1e293b)
+- Success: Green for success messages
+- Error: Red for error messages
+- Border: Light gray (#e2e8f0)
+
+TYPOGRAPHY:
+- Use system font stack for fast loading
+- Base font size: 16px
+- Line height: 1.6 for body text
+- Clear heading hierarchy (h1 > h2 > h3)
+
+SPACING:
+- Consistent padding throughout
+- Use Tailwind spacing scale
+- Adequate margins between sections
+
+RESPONSIVE BREAKPOINTS:
+- Mobile: Less than 640px
+- Tablet: 640px to 1024px
+- Desktop: Greater than 1024px
+
+COMPONENT STYLING:
+- Buttons with hover and focus states
+- Cards with subtle shadows
+- Clear visual hierarchy
+- Smooth transitions (200-300ms)
+
+ACCESSIBILITY:
+- Sufficient color contrast
+- Focus indicators on interactive elements
+- Alt text on images
+- Semantic HTML structure
+
+
+================================================================================
+PART 25: GOOGLE ADSENSE COMPLIANCE CHECKLIST
+================================================================================
+
+CONTENT REQUIREMENTS:
+[ ] Original, valuable content on every page
+[ ] No duplicate or thin content
+[ ] Proper grammar and spelling
+[ ] Clear navigation between pages
+[ ] Minimum 15-20 pages of content
+
+REQUIRED PAGES:
+[ ] Privacy Policy with AdSense disclosure
+[ ] Terms of Service
+[ ] About page
+[ ] Contact page
+
+USER EXPERIENCE:
+[ ] Mobile responsive design
+[ ] Fast page loading
+[ ] Easy navigation
+[ ] No intrusive popups
+[ ] No auto-playing audio or video
+
+AD PLACEMENT RULES:
+[ ] Maximum 3 ad units per page initially
+[ ] Ads clearly distinguished from content
+[ ] No ads that interfere with content
+[ ] No ads placed to cause accidental clicks
+[ ] Clear separation between ads and content
+[ ] No floating or sticky ads that follow scroll
+
+PROHIBITED CONTENT (ensure none exists):
+[ ] No adult content
+[ ] No copyrighted material
+[ ] No violent content
+[ ] No hate speech
+[ ] No illegal content
+[ ] No deceptive practices
+
+TECHNICAL REQUIREMENTS:
+[ ] Valid HTML
+[ ] All links working (no 404 errors)
+[ ] HTTPS enabled (Cloudflare provides this)
+[ ] Site accessible and functional
+
+
+================================================================================
+PART 26: DEPLOYMENT STEPS FOR CLOUDFLARE PAGES
+================================================================================
+
+STEP 1: PREPARE CODE
+- Ensure all code is committed to GitHub repository
+- Verify build works locally with "npm run build"
+- Check no errors in console
+
+STEP 2: CREATE CLOUDFLARE ACCOUNT
+- Go to cloudflare.com
+- Create free account
+- Verify email
+
+STEP 3: CONNECT REPOSITORY
+- Go to Cloudflare Pages
+- Click "Create a project"
+- Choose "Connect to Git"
+- Authorize GitHub access
+- Select your repository
+
+STEP 4: CONFIGURE BUILD
+- Framework preset: Next.js (Static HTML Export)
+- Build command: npm run build
+- Build output directory: out
+- Root directory: / (leave default)
+
+STEP 5: DEPLOY
+- Click "Save and Deploy"
+- Wait for build to complete
+- Test the provided cloudflare.pages.dev URL
+
+STEP 6: ADD CUSTOM DOMAIN
+- Purchase domain from Namecheap, Porkbun, or similar
+- In Cloudflare Pages, go to Custom Domains
+- Add your domain
+- Update DNS records as instructed
+- Wait for DNS propagation (can take up to 24 hours)
+
+STEP 7: VERIFY DEPLOYMENT
+- Test all pages load correctly
+- Test PDF conversion functionality
+- Test on mobile devices
+- Check all links work
+
+
+================================================================================
+PART 27: POST-DEPLOYMENT ADSENSE APPLICATION STEPS
+================================================================================
+
+STEP 1: WAIT FOR SITE TO MATURE
+- Let the site be live for at least 1-2 weeks
+- Add more content if possible
+- Ensure everything works properly
+
+STEP 2: CREATE ADSENSE ACCOUNT
+- Go to google.com/adsense
+- Sign in with Google account
+- Click "Get Started"
+
+STEP 3: SUBMIT YOUR SITE
+- Enter your website URL
+- Select your country
+- Accept terms and conditions
+
+STEP 4: ADD VERIFICATION CODE
+- Google provides a verification code snippet
+- Add it to your site's head section
+- Deploy the updated code
+
+STEP 5: WAIT FOR REVIEW
+- Review typically takes 1-7 days
+- Can take up to 2-4 weeks
+- Google will email you with results
+
+STEP 6: IF APPROVED
+- Create ad units in AdSense dashboard
+- Replace placeholder ad components with real code
+- Deploy updated code
+- Monitor performance
+
+STEP 7: IF REJECTED
+- Review the rejection reason
+- Fix the issues mentioned
+- Reapply after making changes
+- Common reasons: thin content, site not ready, policy violations
+
+STEP 8: PAYMENT SETUP
+- Add payment method (bank transfer or other)
+- Verify address with PIN (mailed to you)
+- Minimum payout threshold: $100
+
+
+================================================================================
+PART 28: FINAL CHECKLIST BEFORE COMPLETION
+================================================================================
+
+FUNCTIONALITY:
+[ ] PDF upload works via drag and drop
+[ ] PDF upload works via click to browse
+[ ] File validation rejects non-PDF files
+[ ] File validation rejects files over 20MB
+[ ] PNG conversion works correctly
+[ ] JPG conversion works correctly
+[ ] Text extraction works correctly
+[ ] Word conversion works correctly
+[ ] Progress bar updates during conversion
+[ ] Individual file download works
+[ ] ZIP download works for multiple files
+[ ] "Convert Another" reset works
+
+PAGES:
+[ ] Homepage loads without errors
+[ ] PDF to PNG page loads and works
+[ ] PDF to JPG page loads and works
+[ ] PDF to Text page loads and works
+[ ] PDF to Word page loads and works
+[ ] Privacy Policy page has all required content
+[ ] Terms of Service page has all required content
+[ ] About page loads correctly
+[ ] Contact page loads correctly
+[ ] FAQ page has at least 15 questions
+[ ] How It Works page loads correctly
+
+DESIGN:
+[ ] Site is mobile responsive
+[ ] All links work (no 404 errors)
+[ ] Images load correctly
+[ ] Consistent styling throughout
+[ ] Readable text on all devices
+[ ] Clear navigation
+
+SEO:
+[ ] All pages have proper metadata
+[ ] robots.txt is present
+[ ] sitemap.xml is present
+[ ] Open Graph tags are set
+
+ADS:
+[ ] Ad placeholders are in place
+[ ] No more than 3 ad slots per page
+[ ] Ads are clearly separated from content
+
+PERFORMANCE:
+[ ] Pages load quickly
+[ ] No console errors
+[ ] Build completes without errors
+
+
+================================================================================
+END OF INSTRUCTIONS
+================================================================================
+
+Copy this entire document and provide it to Cursor as your instructions.
+After Cursor builds the application, follow the deployment and AdSense 
+application steps in Parts 26 and 27.
+
+Good luck with your PDF converter!
