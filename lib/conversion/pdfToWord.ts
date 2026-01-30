@@ -195,7 +195,7 @@ async function extractFormattedText(
     }
 
     // Determine heading level
-    let heading: HeadingLevel | undefined;
+    let heading: (typeof HeadingLevel)[keyof typeof HeadingLevel] | undefined;
     if (isHeading && line.avgFontSize >= docMaxFontSize * 0.9) {
       heading = HeadingLevel.HEADING_1;
     } else if (isHeading || isSubheading) {
