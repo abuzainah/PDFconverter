@@ -311,7 +311,6 @@ export async function pdfToWord(file: File, onProgress?: ProgressCallback): Prom
               new ImageRun({
                 data: imageData,
                 transformation: { width: imgW * 96, height: imgH * 96 },
-                type: 'png',
               }),
             ],
             alignment: AlignmentType.CENTER,
